@@ -2,11 +2,14 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const {graphqlHTTP} = require("express-graphql");
 const { buildSchema } = require("graphql");
+const mongoose = require("mongoose");
+
+const Event = require("./models/events");
+
 const app = express();
 
 app.use(bodyParser.json());
 
-const events = [];
 
 app.use("/graphql", graphqlHTTP({
     /**
@@ -52,28 +55,54 @@ app.use("/graphql", graphqlHTTP({
     `),
     rootValue: {
         events: () => {
-            return events;
+            return Event.find().then(events => {
+                return events.map(event => {
+                    console.log(event);
+                    return {
+                        ...event._doc,
+                        _id: event._doc._id.toString(),
+                        date: event.date.toISOString()
+                    };
+                })
+            }).catch(err => {
+                throw err
+            });
         },
-        createEvent: (args) => {
-            /**
-             * 在jsinfo中学过，arguements参数是以类数组的方式呈现的，应该用索引获得，而不是kv形式，况且箭头函数是
-             * 没有arguements参数的，这里应该是graphql内容对Schema中的函数参数用对象包裹了，这里才可以这么用。
-             */
-            const event = {
-                _id: Math.random().toString(),
+        createEvent: args => {
+            const event = new Event({
                 title: args.eventInput.title,
                 description: args.eventInput.description,
                 price: +args.eventInput.price,
-                date: args.eventInput.date
-            }
-            events.push(event);
-            return event;
+                date: new Date(args.eventInput.date)
+            })
+            return event
+            .save()
+            .then(result => {
+                return {
+                    ...result._doc,
+                    _id: result.id
+                }
+            })
+            .catch(err => {
+                throw err;
+            });
         }
     },
     graphiql: true
 }))
-// app.get("/", (req, res, next) => {
-//     res.send("hello world");
-// })
 
-app.listen(3000);
+/**
+ * 现版本下必须加如下options才能启动成功。
+ */
+mongoose
+.connect(`mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@cluster0.ljtb5.mongodb.net/${process.env.MONGO_DB}?retryWrites=true&w=majority`, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+})
+.then(() => {
+    console.log("successed");
+    app.listen(3000);
+})
+.catch((err) => {
+    console.log(err);
+})
