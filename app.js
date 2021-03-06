@@ -3,8 +3,10 @@ const bodyParser = require("body-parser");
 const {graphqlHTTP} = require("express-graphql");
 const { buildSchema } = require("graphql");
 const mongoose = require("mongoose");
+const bcrypt = require("bcryptjs");
 
 const Event = require("./models/events");
+const User = require("./models/user");
 
 const app = express();
 
@@ -33,11 +35,22 @@ app.use("/graphql", graphqlHTTP({
             date: String!
         }
 
+        type User {
+            _id: ID!
+            email: String!
+            password: String
+        }
+
         input EventInput {
             title: String!
             description: String!
             price: Float!
             date: String!
+        }
+
+        input UserInput {
+            email: String!
+            password: String!
         }
 
         type RootQuery {
@@ -46,6 +59,7 @@ app.use("/graphql", graphqlHTTP({
 
         type RootMutation {
             createEvent(eventInput: EventInput): Event
+            createUser(userInput: UserInput): User
         }
 
         schema {
@@ -57,7 +71,6 @@ app.use("/graphql", graphqlHTTP({
         events: () => {
             return Event.find().then(events => {
                 return events.map(event => {
-                    console.log(event);
                     return {
                         ...event._doc,
                         _id: event._doc._id.toString(),
@@ -73,19 +86,66 @@ app.use("/graphql", graphqlHTTP({
                 title: args.eventInput.title,
                 description: args.eventInput.description,
                 price: +args.eventInput.price,
-                date: new Date(args.eventInput.date)
+                date: new Date(args.eventInput.date),
+                creator: "60434731671d8120f059f127"
             })
-            return event
-            .save()
+            let _event;
+            return event.save()
             .then(result => {
-                return {
+                // 这里这么做的原因是底下返回的result是user.save()的结果，是user的_doc，而本函数原始的目的是返回event创建的结果，因此要特殊处理
+                _event = {
                     ...result._doc,
-                    _id: result.id
+                    id: result.id
                 }
+                console.log(result);
+                return User.findById(result.creator);
+            })
+            .then(user => {
+                if (!user) {
+                    throw new Error("user do not existed");
+                } else {
+                    console.log(user);
+                    // 这里理论上只需要一个Event id，但如果我们传递整个event进去，mongoose也能正确处理
+                    user.createEvents.push(event);
+                    return user.save();
+                }
+            })
+            .then(result => {
+                return _event;
             })
             .catch(err => {
                 throw err;
             });
+        },
+        createUser: args => {
+            return User.findOne({ email: args.userInput.email })
+                .then(user => {
+                    // 不论user存在与否，都会fulfilled并返回user
+                    // 除非，发生网络错误，数据库连接错误等，才会rejected
+                    if (user) {
+                        throw new Error("user already existed");
+                    } else {
+                        return bcrypt.hash(args.userInput.password, 12);
+                    }
+                })
+                .then(hashedPassword => {
+                    const user = new User({
+                        email: args.userInput.email,
+                        password: hashedPassword,
+                    })
+                    return user.save();
+                })
+                .then(result => {
+                    return {
+                        ...result._doc,
+                        _id: result.id,
+                        // 为了安全起见，这里返回null去代替password
+                        password: null
+                    }
+                })
+                .catch(err => {
+                    throw err;
+                })
         }
     },
     graphiql: true

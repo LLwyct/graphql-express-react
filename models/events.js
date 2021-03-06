@@ -17,6 +17,11 @@ const eventSchema = new Schema({
     date: {
         type: Date,
         required: true
+    },
+    creator: {
+        type: Schema.Types.ObjectId,
+        // User注意大小写
+        ref: "User"
     }
 })
 
