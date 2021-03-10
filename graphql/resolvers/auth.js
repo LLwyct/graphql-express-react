@@ -1,4 +1,5 @@
 const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 const User = require("../../models/user");
 
 const rootValue = {
@@ -20,6 +21,34 @@ const rootValue = {
                     password: null
                 }
             }
+        } catch (error) {
+            throw error;
+        }
+    },
+    login: async ({ email, password }) => {
+        try {
+            const user = await User.findOne({email: email});
+            if (!user) {
+                throw new Error("User does not exist!");
+            }
+            const isEqual = await bcrypt.compare(password, user.password);
+            if (!isEqual) {
+                throw new Error("password is incorrect!");
+            }
+            const ONE_WEEK = 7 * 24 * 60 * 60;
+            const token = jwt.sign({
+                userId: user._id,
+                email: user.email
+            }, 
+            "secret", {
+                expiresIn: ONE_WEEK
+            });
+
+            return {
+                _id: user.id,
+                token: token,
+                tokenExpiration: ONE_WEEK
+            };
         } catch (error) {
             throw error;
         }
