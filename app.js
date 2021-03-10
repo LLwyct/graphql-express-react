@@ -29,7 +29,7 @@ mongoose
 })
 .then(() => {
     console.log("successed");
-    app.listen(3000);
+    app.listen(3030);
 })
 .catch((err) => {
     console.log(err);
