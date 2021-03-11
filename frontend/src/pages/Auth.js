@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
 import './Auth.css';
-
+import AuthContext from '../context/auth-context';
 
 class AuthPage extends Component  {
+
+    static contextType = AuthContext;
+
     constructor (props) {
         super(props);
         this.emailEl = React.createRef();
@@ -51,13 +54,18 @@ class AuthPage extends Component  {
                 },
                 body: JSON.stringify(requestBody)
             });
-
             data = await response.json();
+            if (data?.data?.login?.token) {
+                let { token, userId, tokenExpiration } = data?.data?.login?.token;
+                this.context.login(
+                    token,
+                    userId,
+                    tokenExpiration
+                )
+            }
         } catch (error) {
             throw error;
         }
-        console.log(response);
-        console.log(data);
     }
 
     swithHandler = () => {
