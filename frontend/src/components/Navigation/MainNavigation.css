@@ -4,7 +4,7 @@
     top: 0;
     width: 100%;
     height: 3.5rem;
-    background-color: #44cef6;
+    background-color: #B4EDD2;
     padding: 0 1rem;
     display: flex;
     justify-content: space-around;
@@ -34,5 +34,5 @@
 .main-navigation__item a:hover,
 .main-navigation__item a:active,
 .main-navigation__item a.active {
-    color: #a88462;
+    color: #A78C9D;
 }
