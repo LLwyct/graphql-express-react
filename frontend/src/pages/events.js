@@ -2,11 +2,15 @@ import React, { Component } from 'react';
 import Modal from '../components/Modal/Modal';
 import Dropback from '../components/Dropback/Dropback';
 import AuthContext from '../context/auth-context';
+import EventList from '../components/Events/EventList/EventList';
+import Snipper from '../components/Snipper/Snipper';
 
 class EventsPage extends Component {
     state = {
         isModalShow: false,
-        events: []
+        isLoading: false,
+        events: [],
+        selectedEvent: null
     }
 
     static contextType = AuthContext;
@@ -30,10 +34,11 @@ class EventsPage extends Component {
 
     onCancel = () => {
         this.setState({
-            isModalShow: false
+            isModalShow: false,
+            selectedEvent: null
         })
     };
-
+    onBook = () => {}
     onConfirm = () => {
         const title = this.titleElRef.current.value;
         const date = this.dateElRef.current.value;
@@ -88,6 +93,9 @@ class EventsPage extends Component {
      * fetch all events
      */
     fetchEvents () {
+        this.setState({
+            isLoading: true
+        });
         const queryBody = {
             query: `
                 query {
@@ -97,6 +105,9 @@ class EventsPage extends Component {
                         price
                         date
                         description
+                        creator {
+                            _id
+                        }
                     }
                 }
             `
@@ -108,25 +119,41 @@ class EventsPage extends Component {
             },
             body: JSON.stringify(queryBody),
         })
-            .then((response) => {
-                if (response.status !== 200 && response.status !== 201) {
-                    throw new Error("request failed!");
-                }
-                return response.json();
+        .then((response) => {
+            if (response.status !== 200 && response.status !== 201) {
+                throw new Error("request failed!");
+            }
+            return response.json();
+        })
+        .then((data) => {
+            this.setState({
+                events: data.data.events
             })
-            .then((data) => {
-                this.setState({
-                    events: data.data.events
-                })
-            })
-            .catch((err) => {
-                throw err;
+        })
+        .catch((err) => {
+            throw err;
+        })
+        .then(() => {
+            this.setState({
+                isLoading: false
             });
+        },err => {
+            this.setState({
+                isLoading: false
+            });
+            throw err;
+        });
+    }
+
+    showDetailHandler = (eventId) => {
+        this.setState(prevState => {
+            const event = prevState.events.find(event => event._id === eventId);
+            return {
+                selectedEvent: event
+            }
+        })
     }
     render() {
-        const eventsList = this.state.events.map(event => {
-            return <li className="eventlist__item" key={event._id}>{event.title}</li>
-        });
         return (
             <React.Fragment>
                 {this.state.isModalShow && <Dropback />}
@@ -134,6 +161,7 @@ class EventsPage extends Component {
                     title="Add an event" 
                     onCancel={this.onCancel}
                     onConfirm={this.onConfirm}
+                    secondBtnText="Confirm"
                 >
                     <form>
                         <div className="form-control">
@@ -155,13 +183,30 @@ class EventsPage extends Component {
                         </div>
                     </form>
                 </Modal>}
+                {this.state.selectedEvent && <Modal
+                    title="Event Detail"
+                    onCancel={this.onCancel}
+                    onConfirm={this.onBook}
+                    secondBtnText="Book"
+                >
+                    <h1>{this.state.selectedEvent.title}</h1>
+                    <h2 className="text--highlight">
+                        price: {this.state.selectedEvent.price}$ - {new Date(this.state.selectedEvent.date).toLocaleString()}
+                    </h2>
+                    <p>
+                        {this.state.selectedEvent.description}
+                    </p>
+                </Modal>}
                 <div>
                     <h1>The events Page</h1>
                     {this.context.token && <button onClick={this.modalStateSwitchHandler}>Add Event</button>}
                 </div>
-                <div>
-                    <ul className="eventlist">{eventsList}</ul>
-                </div>
+                {
+                    this.state.isLoading ? <Snipper /> 
+                    : <div>
+                        <EventList events={this.state.events} showDetail={this.showDetailHandler}/>
+                    </div>
+                }
             </React.Fragment>
         );
     }

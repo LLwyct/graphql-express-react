@@ -56,10 +56,10 @@ class AuthPage extends Component  {
             });
             data = await response.json();
             if (data?.data?.login?.token) {
-                let { token, userId, tokenExpiration } = data?.data?.login;
+                let { token, _id, tokenExpiration } = data?.data?.login;
                 this.context.login(
                     token,
-                    userId,
+                    _id,
                     tokenExpiration
                 )
             }

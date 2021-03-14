@@ -1,0 +1,23 @@
+.eventlist {
+    list-style: none;
+    padding: 0;
+    width: 40rem;
+    margin: 0 auto;
+}
+
+.eventlist__item {
+    padding: 1rem;
+    border: 1px solid palevioletred;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+}
+
+.eventlist__item + .eventlist__item {
+    margin-top: 1rem;
+}
+
+.text--highlight {
+    color: #777;
+    margin: 0;
+}
