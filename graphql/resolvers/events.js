@@ -14,13 +14,16 @@ const rootValue = {
             throw error;
         }
     },
-    createEvent: async args => {
+    createEvent: async (args, req) => {
+        if (!req.isAuth) {
+            throw new Error('Unauthenticated!');
+        }
         const event = new Event({
             title: args.eventInput.title,
             description: args.eventInput.description,
             price: +args.eventInput.price,
             date: new Date(args.eventInput.date),
-            creator: "604482754c6bd70d2453f3e0"
+            creator: req.userId
         });
         try {
             let _event;
