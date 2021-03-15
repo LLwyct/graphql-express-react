@@ -11,7 +11,7 @@ class EventsPage extends Component {
         isLoading: false,
         events: [],
         selectedEvent: null
-    }
+    };
 
     static contextType = AuthContext;
 
@@ -31,14 +31,53 @@ class EventsPage extends Component {
             isModalShow: true,
         })
     };
-
     onCancel = () => {
         this.setState({
             isModalShow: false,
             selectedEvent: null
         })
     };
-    onBook = () => {}
+    bookEventHandler = () => {
+        if (!this.context.token) {
+            this.setState({selectedEvent: null});
+            return;
+        }
+        const queryBody = {
+            query: `
+                mutation {
+                    bookEvent(eventId: "${this.state.selectedEvent._id}") {
+                        _id
+                        createdAt
+                        updatedAt
+                    }
+                }
+            `
+        }
+        fetch("http://localhost:3030/graphql", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": "Bearer " + this.context.token
+            },
+            body: JSON.stringify(queryBody),
+        })
+        .then(response => {
+            if (response.status !== 200 && response.status !== 201) {
+                throw new Error("request failed!")
+            }
+            this.setState({
+                isModalShow: false
+            })
+            return response.json();
+        })
+        .then(data => {
+            console.log(data.data);
+            this.setState({selectedEvent: null});
+        })
+        .catch(err => {
+            throw err;
+        });
+    };
     onConfirm = () => {
         const title = this.titleElRef.current.value;
         const date = this.dateElRef.current.value;
@@ -61,12 +100,11 @@ class EventsPage extends Component {
                 }
             `
         }
-        const token = this.context.token;
         fetch("http://localhost:3030/graphql", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                "Authorization": "Bearer " + token
+                "Authorization": "Bearer " + this.context.token
             },
             body: JSON.stringify(queryBody),
         })
@@ -87,7 +125,7 @@ class EventsPage extends Component {
         })
         .catch(err => {
             throw err;
-        }) ;
+        });
     };
     /**
      * fetch all events
@@ -186,8 +224,8 @@ class EventsPage extends Component {
                 {this.state.selectedEvent && <Modal
                     title="Event Detail"
                     onCancel={this.onCancel}
-                    onConfirm={this.onBook}
-                    secondBtnText="Book"
+                    onConfirm={this.bookEventHandler}
+                    secondBtnText={this.context.token ? "Book" : "Confirm"}
                 >
                     <h1>{this.state.selectedEvent.title}</h1>
                     <h2 className="text--highlight">

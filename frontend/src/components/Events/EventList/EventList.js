@@ -10,7 +10,7 @@ const EventList = props => {
     });
 
     return (
-        <ul className="eventlist">{eventItemList}</ul>
+        eventItemList.length === 0 ? <h2>No Events</h2> : <ul className="eventlist">{eventItemList}</ul>
     );
 }
 
