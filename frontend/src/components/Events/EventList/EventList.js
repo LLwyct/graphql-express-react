@@ -1,6 +1,9 @@
 import EventItem from './EventItem/EventItem';
 
 const EventList = props => {
+    if (props.events.length === 0) {
+        return <h1 style={{textAlign: "center"}}>Empty</h1>
+    }
     const eventItemList = props.events.map(event => {
         return <EventItem
                     event={event}
@@ -10,7 +13,7 @@ const EventList = props => {
     });
 
     return (
-        eventItemList.length === 0 ? <h2>No Events</h2> : <ul className="eventlist">{eventItemList}</ul>
+        <ul className="eventlist">{eventItemList}</ul>
     );
 }
 
