@@ -15,7 +15,6 @@ const rootValue = {
                 return transformBooking(booking);
             })
         } catch (error) {
-            console.log(error);
             throw error;
         }
     },
@@ -32,7 +31,6 @@ const rootValue = {
             const result = await booking.save();
             return transformBooking(result);
         } catch (error) {
-            console.log(error);
             throw error;
         }
     },
@@ -46,7 +44,6 @@ const rootValue = {
             await Booking.deleteOne({ _id: args.bookingId });
             return event;
         } catch (error) {
-            console.log(error);
             throw error;
         }
     }

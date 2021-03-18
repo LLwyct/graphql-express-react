@@ -145,6 +145,9 @@ class EventsPage extends Component {
                         description
                         creator {
                             _id
+                            createEvents {
+                                title
+                            }
                         }
                     }
                 }

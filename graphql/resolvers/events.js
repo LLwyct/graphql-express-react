@@ -9,7 +9,7 @@ const rootValue = {
             const events = await Event.find();
             return events.map(event => {
                 return transformEvent(event);
-            })
+            });
         } catch (error) {
             throw error;
         }
