@@ -81,18 +81,19 @@ class AuthPage extends Component  {
         return (
             <React.Fragment>
                 <h1>The Auth Page</h1>
-                <form action="" className="auth-form" onSubmit={ this.submitHandler }>
-                    <div className="form-control">
+                <form action="" onSubmit={this.submitHandler} className="auth-form">
+                    <div class="form-group">
                         <label htmlFor="email">Email</label>
-                        <input type="email" id="email" ref={this.emailEl} />
+                        <input type="email" id="email" class="form-control" ref={this.emailEl} />
+                        <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
                     </div>
-                    <div className="form-control">
+                    <div class="form-group">
                         <label htmlFor="password">Password</label>
-                        <input type="password" id="password" ref={this.passwordEl} />
+                        <input type="password" id="password" class="form-control" ref={this.passwordEl} />
                     </div>
-                    <div className="form-action">
-                        <button type="submit">Submit</button>
-                        <button type="button" onClick={this.swithHandler}>
+                    <div class="form-group" style={{display: 'flex', justifyContent: 'space-between'}}>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                        <button type="button" class="btn btn-light" onClick={this.swithHandler}>
                             swith to {this.state.isLoginMode ? "Signup" : "Signin"}
                         </button>
                     </div>

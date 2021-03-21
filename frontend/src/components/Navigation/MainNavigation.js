@@ -7,7 +7,7 @@ import './MainNavigation.css';
 const MainNavigation = (props) => (
   <AuthContext.Consumer>
     {(context) => (
-      <header className="main-navigation">
+      <header className="bg-primary main-navigation text-light">
         <div className="main-navigation__logo">
           <h1>EasyEvent</h1>
         </div>
@@ -15,16 +15,16 @@ const MainNavigation = (props) => (
           <ul>
             {!context.token && (
               <li>
-                <NavLink to="/auth">Authenticate</NavLink>
+                <NavLink to="/auth" className="text-light">Authenticate</NavLink>
               </li>
             )}
             <li>
-              <NavLink to="/events">Events</NavLink>
+              <NavLink to="/events" className="text-light">Events</NavLink>
             </li>
             {context.token && (
                 <React.Fragment>
                     <li>
-                        <NavLink to="/bookings">Bookings</NavLink>
+                  <NavLink to="/bookings" className="text-light">Bookings</NavLink>
                     </li>
                     <li>
                         <button onClick={context.logout}>Logout</button>

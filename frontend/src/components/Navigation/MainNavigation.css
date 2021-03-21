@@ -28,11 +28,10 @@
 }
 
 .main-navigation__item a {
-    color: black;
     text-decoration: none;
 }
 .main-navigation__item a:hover,
 .main-navigation__item a:active,
 .main-navigation__item a.active {
-    color: #A78C9D;
+    /* color: #; */
 }
