@@ -1,7 +1,7 @@
 import './Modal.css';
 
 const Modal = props => (
-    <div className="modal">
+    <div className="mymodal shadow p-5">
         <header>
             <h1>{props.title}</h1>
         </header>
@@ -9,8 +9,8 @@ const Modal = props => (
             {props.children}
         </section>
         <section className="modal__action">
-            <button onClick={props.onCancel}>Cancel</button>
-            <button onClick={props.onConfirm}>{props.secondBtnText}</button>
+            <button onClick={props.onCancel} className="btn btn-light">Cancel</button>
+            <button onClick={props.onConfirm} className="btn btn-primary" style={{marginLeft: "1rem"}}>{props.secondBtnText}</button>
         </section>
     </div>
 );

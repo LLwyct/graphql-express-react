@@ -11,9 +11,20 @@ const EventList = props => {
                     showDetail={props.showDetail}
                     />
     });
-
     return (
-        <ul className="eventlist">{eventItemList}</ul>
+        <table className="table">
+            <thead>
+                <tr>
+                    <th scope="col">title</th>
+                    <th scope="col">price</th>
+                    <th scope="col">date</th>
+                    <th scope="col">creator</th>
+                </tr>
+            </thead>
+            <tbody>
+                {eventItemList}
+            </tbody>
+        </table>
     );
 }
 

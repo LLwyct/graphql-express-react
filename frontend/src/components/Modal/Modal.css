@@ -1,5 +1,6 @@
-.modal {
+.mymodal {
     position: fixed;
+    z-index: 99;
     margin: 0 auto;
     width: 90%;
     left: 5%;
@@ -7,22 +8,22 @@
     box-shadow: 0 3px 8px rgba(0, 0, 0, 0.25);
 }
 
-.modal > header {
-    padding: 1rem;
+.mymodal > header {
+    /* padding: 1rem; */
 }
-.modal .modal__content {
-    padding: 1rem;
+.mymodal .modal__content {
+    /* padding: 1rem; */
 }
-.modal .modal__action {
-    padding: 1rem;
+.mymodal .modal__action {
+    /* padding: 1rem; */
     display: flex;
     justify-content: flex-end;
 }
-.modal > header > h1 {
-    margin: 0;
+.mymodal > header > h1 {
+    /* margin: 0; */
 }
 @media (min-width: 768px) {
-    .modal {
+    .mymodal {
         width: 30rem;
         left: calc((100% - 30rem) / 2);
     }

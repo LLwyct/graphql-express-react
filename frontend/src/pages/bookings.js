@@ -30,8 +30,10 @@ class BookingsPage extends Component {
                         event {
                             _id
                             title
+                            price
                         }
                         user {
+                            email
                             _id
                         }
                         createdAt
@@ -73,6 +75,7 @@ class BookingsPage extends Component {
             throw err;
         });
     };
+
     cancelBooking = (bookingId) => {
         this.setState({
             isLoading: true
@@ -121,11 +124,12 @@ class BookingsPage extends Component {
     render() {
         return (
             <React.Fragment>
-                <h1>The booking Page</h1>
-                {
-                    this.state.isLoading && <Snipper /> 
-                }
-                <BookingList bookings={this.state.bookings} cancelBooking={this.cancelBooking}></BookingList>
+                <div className="container">
+                    <h1>The booking Page</h1>
+                    {
+                        this.state.isLoading ? <Snipper /> : <BookingList bookings={this.state.bookings} cancelBooking={this.cancelBooking}></BookingList>
+                    }
+                </div>
             </React.Fragment>
         );
     }

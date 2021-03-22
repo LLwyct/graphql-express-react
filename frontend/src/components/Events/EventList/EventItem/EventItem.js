@@ -5,21 +5,18 @@ import AuthContext from '../../../../context/auth-context';
 const EventItem = props => {
     const ctx = React.useContext(AuthContext);
     return (
-        <li className="eventlist__item">
-            <div>
-                <h1>{props.event.title}</h1>
-                <p className="text--highlight">price: {props.event.price}$ - {new Date(props.event.date).toLocaleString()}</p>
-            </div>
-            <div>
-                {
-                    ctx.userId === props.event.creator._id ?
-                        <p>you are the creator.</p>
-                        : <div>
-                            <button onClick={props.showDetail.bind(null, props.event._id)}>MORE DETAIL</button>
-                        </div>
-                }
-            </div>
-        </li>
+        <tr>
+            <th scope="row">{props.event.title}</th>
+            <td>{props.event.price}</td>
+            <td>{new Date(props.event.date).toLocaleString()}</td>
+            <td>{
+                ctx.userId === props.event.creator._id ?
+                "you are the creator."
+                : <div>
+                    <button onClick={() => props.showDetail(props.event._id)} className="btn btn-primary">MORE DETAIL</button>
+                </div>
+                }</td>
+        </tr>
     );
 }
 export default EventItem;

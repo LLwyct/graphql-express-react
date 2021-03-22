@@ -197,7 +197,8 @@ class EventsPage extends Component {
     render() {
         return (
             <React.Fragment>
-                {this.state.isModalShow && <Dropback />}
+                <div className="container">
+                    {(this.state.isModalShow || this.state.selectedEvent) && <Dropback />}
                 {this.state.isModalShow && <Modal
                     title="Add an event" 
                     onCancel={this.onCancel}
@@ -205,21 +206,21 @@ class EventsPage extends Component {
                     secondBtnText="Confirm"
                 >
                     <form>
-                        <div className="form-control">
+                        <div className="form-group">
                             <label htmlFor="title">Title</label>
-                            <input type="text" id="title" ref={this.titleElRef} />
+                            <input type="text" id="title" ref={this.titleElRef} className="form-control"/>
                         </div>
-                        <div className="form-control">
+                            <div className="form-group">
                             <label htmlFor="date">Date</label>
-                            <input type="datetime-local" id="date" ref={this.dateElRef} />
+                                <input type="datetime-local" id="date" ref={this.dateElRef} className="form-control"/>
                         </div>
-                        <div className="form-control">
+                            <div className="form-group">
                             <label htmlFor="price">Price</label>
-                            <input type="number" id="price" ref={this.priceElRef} />
+                                <input type="number" id="price" ref={this.priceElRef} className="form-control"/>
                         </div>
-                        <div className="form-control">
+                            <div className="form-group">
                             <label htmlFor="descrip">Description</label>
-                            <textarea id="descrip" rows="4" ref={this.descriptionElRef} >
+                                <textarea id="descrip" rows="4" ref={this.descriptionElRef} className="form-control">
                             </textarea>
                         </div>
                     </form>
@@ -231,16 +232,18 @@ class EventsPage extends Component {
                     secondBtnText={this.context.token ? "Book" : "Confirm"}
                 >
                     <h1>{this.state.selectedEvent.title}</h1>
-                    <h2 className="text--highlight">
+                    <p className="text--highlight">
                         price: {this.state.selectedEvent.price}$ - {new Date(this.state.selectedEvent.date).toLocaleString()}
-                    </h2>
+                    </p>
                     <p>
                         {this.state.selectedEvent.description}
                     </p>
                 </Modal>}
                 <div>
                     <h1>The events Page</h1>
-                    {this.context.token && <button onClick={this.modalStateSwitchHandler}>Add Event</button>}
+                </div>
+                <div className="m-4" style={{textAlign: "center"}}>
+                    {this.context.token && <button onClick={this.modalStateSwitchHandler} className="btn btn-primary">Add Event</button>}
                 </div>
                 {
                     this.state.isLoading ? <Snipper /> 
@@ -248,6 +251,7 @@ class EventsPage extends Component {
                         <EventList events={this.state.events} showDetail={this.showDetailHandler}/>
                     </div>
                 }
+                </div>
             </React.Fragment>
         );
     }

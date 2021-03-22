@@ -17,6 +17,7 @@ class AuthPage extends Component  {
     }
 
     submitHandler = async (event) => {
+        console.log('?');
         event.preventDefault();
         let email = this.emailEl.current.value;
         let password = this.passwordEl.current.value;
@@ -80,24 +81,27 @@ class AuthPage extends Component  {
     render () {
         return (
             <React.Fragment>
+                <div className="container">
                 <h1>The Auth Page</h1>
-                <form action="" onSubmit={this.submitHandler} className="auth-form">
-                    <div class="form-group">
+                <form onSubmit={this.submitHandler} className="auth-form">
+                    <div className="form-group">
                         <label htmlFor="email">Email</label>
-                        <input type="email" id="email" class="form-control" ref={this.emailEl} />
-                        <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+                        <input type="email" id="email" className="form-control" ref={this.emailEl} />
+                        <small id="emailHelp" className="form-text text-muted">We'll never share your email with anyone else.</small>
                     </div>
-                    <div class="form-group">
+                    <div className="form-group">
                         <label htmlFor="password">Password</label>
-                        <input type="password" id="password" class="form-control" ref={this.passwordEl} />
+                        <input type="password" id="password" className="form-control" ref={this.passwordEl} />
                     </div>
-                    <div class="form-group" style={{display: 'flex', justifyContent: 'space-between'}}>
-                        <button type="submit" class="btn btn-primary">Submit</button>
-                        <button type="button" class="btn btn-light" onClick={this.swithHandler}>
+                    <div className="form-group" style={{display: 'flex', justifyContent: 'space-between'}}>
+                        <button type="submit" className="btn btn-primary">Submit</button>
+                        <button type="button" className="btn btn-light" onClick={this.swithHandler}>
                             swith to {this.state.isLoginMode ? "Signup" : "Signin"}
                         </button>
                     </div>
                 </form>
+                </div>
+
             </React.Fragment>
         );
     }
