@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import './Auth.css';
 import AuthContext from '../context/auth-context';
+import {css} from '@emotion/react';
+
+const style = css``;
 
 class AuthPage extends Component  {
 
@@ -17,7 +20,6 @@ class AuthPage extends Component  {
     }
 
     submitHandler = async (event) => {
-        console.log('?');
         event.preventDefault();
         let email = this.emailEl.current.value;
         let password = this.passwordEl.current.value;
