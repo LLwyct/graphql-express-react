@@ -1,15 +1,12 @@
 import React, { Component } from 'react'
 import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
-
-import './App.css';
-
 import AuthPage from './pages/Auth';
 import EventsPage from './pages/events';
 import BookingsPage from './pages/bookings';
-
 import MainNavigation from './components/Navigation/MainNavigation';
-
 import AuthContext from './context/auth-context';
+/** @jsxImportSource @emotion/react */
+import { css } from '@emotion/react';
 
 class App extends Component {
 
@@ -49,7 +46,7 @@ class App extends Component {
               }}
           >
             <MainNavigation />
-            <main className="main-content">
+            <main css={css`margin-top: 4rem;`}>
               <Switch>
                 {this.state.token && <Redirect from="/" to="/events" exact />}
                 {this.state.token && <Redirect from="/auth" to="/events" exact />}

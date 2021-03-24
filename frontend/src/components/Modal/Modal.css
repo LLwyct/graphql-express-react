@@ -7,20 +7,9 @@
     background-color: white;
     box-shadow: 0 3px 8px rgba(0, 0, 0, 0.25);
 }
-
-.mymodal > header {
-    /* padding: 1rem; */
-}
-.mymodal .modal__content {
-    /* padding: 1rem; */
-}
 .mymodal .modal__action {
-    /* padding: 1rem; */
     display: flex;
     justify-content: flex-end;
-}
-.mymodal > header > h1 {
-    /* margin: 0; */
 }
 @media (min-width: 768px) {
     .mymodal {

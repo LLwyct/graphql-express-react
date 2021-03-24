@@ -1,9 +1,15 @@
-import React, { Component } from 'react';
-import './Auth.css';
-import AuthContext from '../context/auth-context';
+/** @jsxImportSource @emotion/react */
 import {css} from '@emotion/react';
+import React, { Component } from 'react';
+import AuthContext from '../context/auth-context';
 
-const style = css``;
+
+const styled = {
+    auth_form: css`
+        width: 400px;
+        margin: 0 auto;
+    `
+}
 
 class AuthPage extends Component  {
 
@@ -85,7 +91,10 @@ class AuthPage extends Component  {
             <React.Fragment>
                 <div className="container">
                 <h1>The Auth Page</h1>
-                <form onSubmit={this.submitHandler} className="auth-form">
+                    <form
+                        onSubmit={this.submitHandler}
+                        css={styled.auth_form}
+                    >
                     <div className="form-group">
                         <label htmlFor="email">Email</label>
                         <input type="email" id="email" className="form-control" ref={this.emailEl} />

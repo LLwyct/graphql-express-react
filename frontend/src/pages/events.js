@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Modal from '../components/Modal/Modal';
 import Dropback from '../components/Dropback/Dropback';
 import AuthContext from '../context/auth-context';
-import EventList from '../components/Events/EventList/EventList';
+import EventList from '../components/Events/EventList';
 import Snipper from '../components/Snipper/Snipper';
 
 class EventsPage extends Component {
@@ -127,9 +127,7 @@ class EventsPage extends Component {
             throw err;
         });
     };
-    /**
-     * fetch all events
-     */
+    // fetch all events
     fetchEvents () {
         this.setState({
             isLoading: true
@@ -231,7 +229,7 @@ class EventsPage extends Component {
                     onConfirm={this.bookEventHandler}
                     secondBtnText={this.context.token ? "Book" : "Confirm"}
                 >
-                    <h1>{this.state.selectedEvent.title}</h1>
+                    <h2>{this.state.selectedEvent.title}</h2>
                     <p className="text--highlight">
                         price: {this.state.selectedEvent.price}$ - {new Date(this.state.selectedEvent.date).toLocaleString()}
                     </p>
@@ -243,7 +241,7 @@ class EventsPage extends Component {
                     <h1>The events Page</h1>
                 </div>
                 <div className="m-4" style={{textAlign: "center"}}>
-                    {this.context.token && <button onClick={this.modalStateSwitchHandler} className="btn btn-primary">Add Event</button>}
+                        {this.context.token && <button onClick={this.modalStateSwitchHandler} className="btn btn-primary" disabled={this.state.isLoading ? true : false}>Add Event</button>}
                 </div>
                 {
                     this.state.isLoading ? <Snipper /> 
